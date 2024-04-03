@@ -125,7 +125,7 @@ namespace Muks.WeightedRandom
 
             //총 가중치 값에 0~1f의 랜덤 값을 곱해 기준점을 구한다.
             int pivot = Mathf.RoundToInt(totalWeight * RandomRange(0.0f, 1.0f));
-
+            Debug.Log(RandomRange(0.0f, 1.0f));
             //딕셔너리를 순회하며 가중치를 더하다 기준점 이상이 되면 그 아이템을 반환한다.
             foreach (var item in _itemDic)
             {
@@ -190,6 +190,7 @@ namespace Muks.WeightedRandom
                 Debug.LogError("Min값이 Max값보다 높습니다.");
                 return -10000;
             }
+
             int randInt = RandomNumberGenerator.GetInt32(min, max);
             return randInt;
         }
@@ -211,11 +212,11 @@ namespace Muks.WeightedRandom
                 rng.GetBytes(bytes);
             }
 
-            float randValue = BitConverter.ToSingle(bytes, 0);
-            float range = max - min;
-            float rendFloat = (randValue * range) + min;
+            int randInt = BitConverter.ToInt32(bytes, 0);
+            float rand01 = (float)Math.Abs(randInt) / int.MaxValue;
+            float randFloat = min + rand01 * (max - min);
 
-            return rendFloat;
+            return randFloat;
         }
 
     }
