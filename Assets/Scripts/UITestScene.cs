@@ -22,12 +22,18 @@ public class UITestScene : MonoBehaviour
 
         _choiceButton.onClick.AddListener(OnChoiceButtonClicked);
         _testScene.OnGetRandomHandler += UpdateUI;
+
+        _remainingItemsText.text = string.Empty;
+        foreach (string key in _itemDic.Keys)
+        {
+            int value = _itemDic[key];
+            _remainingItemsText.text += key + ": " + value + "\n";
+        }
     }
 
 
     private void UpdateUI(string item)
     {
-        Debug.Log("½ÇÇà");
         _getItemText.text = item + " Get!";
         _remainingItemsText.text = string.Empty;
 
