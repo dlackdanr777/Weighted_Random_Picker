@@ -8,17 +8,19 @@ public class UITestScene : MonoBehaviour
 {
     [SerializeField] private Text _getItemText;
     [SerializeField] private Text _remainingItemsText;
+    [SerializeField] private Text _probabilityText;
     [SerializeField] private Button _choiceButton;
 
 
     private TestScene _testScene;
+    private WeightedRandom<string> _random;
     private Dictionary<string, int> _itemDic;
 
     public void Init(TestScene testScene)
     {
         _testScene = testScene;
-        WeightedRandom<string> random = _testScene.GetWeightedRandomClass();
-        _itemDic = random.GetList();
+        _random = _testScene.GetWeightedRandomClass();
+        _itemDic = _random.GetList();
 
         _choiceButton.onClick.AddListener(OnChoiceButtonClicked);
         _testScene.OnGetRandomHandler += UpdateUI;
@@ -29,6 +31,14 @@ public class UITestScene : MonoBehaviour
             int value = _itemDic[key];
             _remainingItemsText.text += key + ": " + value + "\n";
         }
+
+        _probabilityText.text = string.Empty;
+        Dictionary<string, float> _probabilityDic = _random.GetPercent();
+        foreach (string key in _probabilityDic.Keys)
+        {
+            float value = _probabilityDic[key];
+            _probabilityText.text += key + ": " + (value * 100) + "% \n";
+        }
     }
 
 
@@ -36,12 +46,22 @@ public class UITestScene : MonoBehaviour
     {
         _getItemText.text = item + " Get!";
         _remainingItemsText.text = string.Empty;
+        _probabilityText.text = string.Empty;
 
-        foreach(string key in _itemDic.Keys)
+        foreach (string key in _itemDic.Keys)
         {
             int value = _itemDic[key];
             _remainingItemsText.text += key + ": " + value + "\n";
         }
+
+        Dictionary<string, float> _probabilityDic = _random.GetPercent();
+
+        foreach(string key in _probabilityDic.Keys)
+        {
+            float value = _probabilityDic[key];
+            _probabilityText.text += key + ": " + (value * 100) + "% \n";
+        }
+
     }
 
 
